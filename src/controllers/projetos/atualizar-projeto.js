@@ -1,15 +1,13 @@
 import { StatusCodes } from 'http-status-codes'
-import { prisma } from '../../lib/prisma.js'
+import { ProjetosRepository } from '../../repositories/projetos-repository.js'
 
 export async function atualizarProjeto(req, res) {
-  const { id } = req.params
+  const { id: _id } = req.params
+  const id = parseInt(_id)
   const { titulo, descricao } = req.body
 
-  const projeto = await prisma.projeto.findUnique({
-    where: {
-      id: parseInt(id)
-    }
-  })
+  const projetosRepository = new ProjetosRepository()
+  const projeto = await projetosRepository.pegarPorId(id)
 
   if (!projeto) {
     return res.status(StatusCodes.NOT_FOUND).json({
@@ -22,12 +20,7 @@ export async function atualizarProjeto(req, res) {
     descricao: descricao ? descricao : projeto.descricao
   }
 
-  const projetoAtualizado = await prisma.projeto.update({
-    where: {
-      id: parseInt(id)
-    },
-    data: novoProjeto
-  })
+  const projetoAtualizado = await projetosRepository.atualizar(id, novoProjeto)
 
   return res.json({
     data: projetoAtualizado

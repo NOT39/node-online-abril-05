@@ -1,15 +1,10 @@
-import { prisma } from '../../lib/prisma.js'
+import { ProjetosRepository } from '../../repositories/projetos-repository.js'
 
 export async function pegarProjetos(req, res) {
   const { titulo } = req.query
 
-  const projetosEncontrados = await prisma.projeto.findMany({
-    where: {
-      titulo: {
-        contains: titulo
-      },
-    }
-  })
+  const projetosRepository = new ProjetosRepository()
+  const projetosEncontrados = await projetosRepository.listar(titulo)
 
   return res.json({
     data: projetosEncontrados

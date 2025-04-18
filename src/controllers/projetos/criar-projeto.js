@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes'
-import { prisma } from '../../lib/prisma.js'
+import { ProjetosRepository } from '../../repositories/projetos-repository.js'
 
 export async function criarProjeto(req, res) {
   const { titulo, descricao, usuarioId } = req.body
@@ -10,12 +10,11 @@ export async function criarProjeto(req, res) {
     })
   }
 
-  const projetoCriado = await prisma.projeto.create({
-    data: {
-      titulo,
-      descricao,
-      usuarioId
-    }
+  const projetosRepository = new ProjetosRepository()
+  const projetoCriado = await projetosRepository.criar({
+    titulo,
+    descricao,
+    usuarioId
   })
 
   return res.status(StatusCodes.CREATED).json({

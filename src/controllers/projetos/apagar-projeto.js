@@ -1,14 +1,12 @@
 import { StatusCodes } from 'http-status-codes'
-import { prisma } from '../../lib/prisma.js'
+import { ProjetosRepository } from '../../repositories/projetos-repository.js'
 
 export async function apagarProjeto(req, res) {
-  const { id } = req.params
+  const { id: _id } = req.params
+  const id = parseInt(_id)
 
-  const projeto = await prisma.projeto.findUnique({
-    where: {
-      id: parseInt(id)
-    }
-  })
+  const projetosRepository = new ProjetosRepository()
+  const projeto = projetosRepository.pegarPorId(id)
 
   if (!projeto) {
     return res.status(StatusCodes.NOT_FOUND).json({
@@ -16,11 +14,7 @@ export async function apagarProjeto(req, res) {
     })
   }
 
-  await prisma.projeto.delete({
-    where: {
-      id: parseInt(id)
-    }
-  })
+  await projetosRepository.apagar(id)
 
   return res.status(StatusCodes.NO_CONTENT).send()
 }

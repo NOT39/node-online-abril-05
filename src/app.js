@@ -1,5 +1,6 @@
 import express from "express";
 import { projetosRoutes } from './routes/projetos.js';
+import { usuariosRoutes } from './routes/usuarios.js';
 
 export const app = express()
 
@@ -16,4 +17,4 @@ app.get("/", (req, res) => {
 })
 
 app.use(projetosRoutes)
-
+app.use(usuariosRoutes)

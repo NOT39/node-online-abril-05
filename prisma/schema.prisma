@@ -23,6 +23,8 @@ model Usuario {
 
   nome String?
 
+  ativo Boolean @default(true)
+
   projetos Projeto[]
   likes    Like[]
   dislike  Dislike[]

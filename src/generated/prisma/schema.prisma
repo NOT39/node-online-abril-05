@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id String @id @default(uuid())
+
+  email      String @unique
+  hash_senha String
+
+  nome String?
+
+  ativo Boolean @default(true)
+
+  projetos Projeto[]
+  likes    Like[]
+  dislike  Dislike[]
+
+  @@map("usuarios")
+}
+
+model Projeto {
+  id Int @id @default(autoincrement())
+
+  titulo    String
+  descricao String?
+  imagemURL String? @map("imagem_url")
+
+  repositorioURL String? @map("repositorio_url")
+  previewURL     String? @map("preview_url")
+
+  likes    Like[]
+  dislikes Dislike[]
+
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId String  @map("usuario_id")
+
+  @@map("projetos")
+}
+
+model Like {
+  id Int @id @default(autoincrement())
+
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId String  @map("usuario_id")
+
+  projeto   Projeto @relation(fields: [projetoId], references: [id])
+  projetoId Int     @map("projeto_id")
+
+  @@map("likes")
+}
+
+model Dislike {
+  id Int @id @default(autoincrement())
+
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId String  @map("usuario_id")
+
+  projeto   Projeto @relation(fields: [projetoId], references: [id])
+  projetoId Int     @map("projeto_id")
+
+  @@map("dislikes")
+}
