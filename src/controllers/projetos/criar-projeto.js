@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes'
 import { ProjetosRepository } from '../../repositories/projetos-repository.js'
 
 export async function criarProjeto(req, res) {
-  const { titulo, descricao, usuarioId } = req.body
+  const { titulo, descricao } = req.body
 
   if (!titulo) {
     return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
@@ -14,7 +14,7 @@ export async function criarProjeto(req, res) {
   const projetoCriado = await projetosRepository.criar({
     titulo,
     descricao,
-    usuarioId
+    usuarioId: req.sub
   })
 
   return res.status(StatusCodes.CREATED).json({

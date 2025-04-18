@@ -1,6 +1,9 @@
+import "dotenv/config"
+
 import express from "express";
 import { projetosRoutes } from './routes/projetos.js';
 import { usuariosRoutes } from './routes/usuarios.js';
+import { autenticacaoRoutes } from './routes/autenticacao.js';
 
 export const app = express()
 
@@ -18,3 +21,4 @@ app.get("/", (req, res) => {
 
 app.use(projetosRoutes)
 app.use(usuariosRoutes)
+app.use(autenticacaoRoutes)
