@@ -5,12 +5,15 @@ import { atualizarProjeto } from '../controllers/projetos/atualizar-projeto.js';
 import { apagarProjeto } from '../controllers/projetos/apagar-projeto.js';
 import { pegarProjetoPorId } from '../controllers/projetos/pegar-projeto-por-id.js';
 import { verificarJwt } from '../middlewares/verificar-jwt.js';
+import { pegarProjetosUsuario } from '../controllers/projetos/pegar-projetos-usuario.js';
 
 export const projetosRoutes = Router()
 
 projetosRoutes.get("/projetos", verificarJwt, pegarProjetos)
 
 projetosRoutes.get("/projetos/:id", verificarJwt, pegarProjetoPorId)
+
+projetosRoutes.get("/usuarios/:id/projetos", verificarJwt, pegarProjetosUsuario)
 
 projetosRoutes.post("/projetos", verificarJwt, criarProjeto)
 

@@ -23,6 +23,16 @@ export class ProjetosRepository {
     return projeto
   }
 
+  async pegarProjetoPorUsuarioId(usuarioId) {
+    const projetos = await prisma.projeto.findMany({
+      where: {
+        usuarioId
+      }
+    })
+
+    return projetos
+  }
+
   async criar({ titulo, descricao, usuarioId, imagemURL, repositorioURL, previewURL }) {
     const projetoCriado = await prisma.projeto.create({
       data: {

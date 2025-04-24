@@ -13,6 +13,12 @@ export async function apagarUsuario(req, res) {
     })
   }
 
+  if (projeto.usuarioId !== req.sub) {
+    return res.status(StatusCodes.FORBIDDEN).json({
+      mensagem: "O usuário não tem permissão para modificar o projeto."
+    })
+  }
+
   await usuariosRepository.apagar(id)
 
   return res.status(StatusCodes.NO_CONTENT).send()

@@ -15,6 +15,12 @@ export async function atualizarProjeto(req, res) {
     })
   }
 
+  if (projeto.usuarioId !== req.sub) {
+    return res.status(StatusCodes.FORBIDDEN).json({
+      mensagem: "O usuário não tem permissão para modificar o projeto."
+    })
+  }
+
   const novoProjeto = {
     titulo: titulo ? titulo : projeto.titulo,
     descricao: descricao ? descricao : projeto.descricao

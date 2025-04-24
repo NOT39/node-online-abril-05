@@ -16,6 +16,12 @@ export async function atualizarUsuario(req, res) {
     })
   }
 
+  if (projeto.usuarioId !== req.sub) {
+    return res.status(StatusCodes.FORBIDDEN).json({
+      mensagem: "O usuário não tem permissão para modificar o projeto."
+    })
+  }
+
   if (email) {
     const usuarioEncontradoComEmail = await usuariosRepository.pegarPorEmail(email)
 
