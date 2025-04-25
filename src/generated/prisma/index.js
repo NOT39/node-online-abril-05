@@ -84,6 +84,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -120,6 +123,11 @@ exports.Prisma.DislikeScalarFieldEnum = {
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
@@ -163,7 +171,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
@@ -172,17 +180,17 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
+  "activeProvider": "postgresql",
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "file:./dev.db"
+        "value": "postgres://postgres:postgres@localhost:5432/aulas-node?schema=public"
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ngenerator erd {\n  provider = \"prisma-erd-generator\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Usuario {\n  id String @id @default(uuid())\n\n  email      String @unique\n  hash_senha String\n\n  nome String?\n\n  ativo Boolean @default(true)\n\n  projetos Projeto[]\n  likes    Like[]\n  dislike  Dislike[]\n\n  @@map(\"usuarios\")\n}\n\nmodel Projeto {\n  id Int @id @default(autoincrement())\n\n  titulo    String\n  descricao String?\n  imagemURL String? @map(\"imagem_url\")\n\n  repositorioURL String? @map(\"repositorio_url\")\n  previewURL     String? @map(\"preview_url\")\n\n  likes    Like[]\n  dislikes Dislike[]\n\n  usuario   Usuario @relation(fields: [usuarioId], references: [id])\n  usuarioId String  @map(\"usuario_id\")\n\n  @@map(\"projetos\")\n}\n\nmodel Like {\n  id Int @id @default(autoincrement())\n\n  usuario   Usuario @relation(fields: [usuarioId], references: [id])\n  usuarioId String  @map(\"usuario_id\")\n\n  projeto   Projeto @relation(fields: [projetoId], references: [id])\n  projetoId Int     @map(\"projeto_id\")\n\n  @@map(\"likes\")\n}\n\nmodel Dislike {\n  id Int @id @default(autoincrement())\n\n  usuario   Usuario @relation(fields: [usuarioId], references: [id])\n  usuarioId String  @map(\"usuario_id\")\n\n  projeto   Projeto @relation(fields: [projetoId], references: [id])\n  projetoId Int     @map(\"projeto_id\")\n\n  @@map(\"dislikes\")\n}\n",
-  "inlineSchemaHash": "c6dd14db872c862d5e772e1ad7de77ee2b5000f3bfd8be90d1b49c82b02e670e",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ngenerator erd {\n  provider = \"prisma-erd-generator\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Usuario {\n  id String @id @default(uuid())\n\n  email      String @unique\n  hash_senha String\n\n  nome String?\n\n  ativo Boolean @default(true)\n\n  projetos Projeto[]\n  likes    Like[]\n  dislike  Dislike[]\n\n  @@map(\"usuarios\")\n}\n\nmodel Projeto {\n  id Int @id @default(autoincrement())\n\n  titulo    String\n  descricao String?\n  imagemURL String? @map(\"imagem_url\")\n\n  repositorioURL String? @map(\"repositorio_url\")\n  previewURL     String? @map(\"preview_url\")\n\n  likes    Like[]\n  dislikes Dislike[]\n\n  usuario   Usuario @relation(fields: [usuarioId], references: [id])\n  usuarioId String  @map(\"usuario_id\")\n\n  @@map(\"projetos\")\n}\n\nmodel Like {\n  id Int @id @default(autoincrement())\n\n  usuario   Usuario @relation(fields: [usuarioId], references: [id])\n  usuarioId String  @map(\"usuario_id\")\n\n  projeto   Projeto @relation(fields: [projetoId], references: [id])\n  projetoId Int     @map(\"projeto_id\")\n\n  @@map(\"likes\")\n}\n\nmodel Dislike {\n  id Int @id @default(autoincrement())\n\n  usuario   Usuario @relation(fields: [usuarioId], references: [id])\n  usuarioId String  @map(\"usuario_id\")\n\n  projeto   Projeto @relation(fields: [projetoId], references: [id])\n  projetoId Int     @map(\"projeto_id\")\n\n  @@map(\"dislikes\")\n}\n",
+  "inlineSchemaHash": "adfb343fe220aed764b5f54eb68aab7a5483561e914c03d1e67bdad0e0950322",
   "copyEngine": true
 }
 
