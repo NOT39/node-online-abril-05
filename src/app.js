@@ -10,7 +10,8 @@ import { autenticacaoRoutes } from './routes/autenticacao.js';
 export const app = express()
 
 app.use(cors({
-  origin: ["*"],
+  origin: "*",
+  allowedHeaders: ["Authorization", "Content-Type"],
 }))
 
 app.use(express.json())
